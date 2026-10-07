@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import {
   IonHeader,
@@ -38,6 +38,7 @@ import { ProductService } from '../../services/producto.services';
 })
 export class ProductosPage implements OnInit {
   private productService = inject(ProductService);
+  private changeDetector = inject(ChangeDetectorRef);
 
   products: Product[] = [];
   total = 0;
@@ -92,11 +93,13 @@ export class ProductosPage implements OnInit {
         this.products = response.products;
         this.total = response.total;
         this.loading = false;
+        this.changeDetector.markForCheck();
       },
       error: (err: unknown) => {
         console.error(err);
         this.error = 'No se han podido cargar los productos.';
         this.loading = false;
+        this.changeDetector.markForCheck(); // Se refresca automáticamente para mostrar.
       }
     });
   }
