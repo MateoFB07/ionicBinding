@@ -1,0 +1,7 @@
+/* Punto 5: fija el botón de tema en la esquina inferior de la pantalla. */
+.theme-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 1000;
+}

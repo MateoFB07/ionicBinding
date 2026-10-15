@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Contacto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form" (ngSubmit)="enviar()">
+    <ion-item lines="full">
+      <ion-input formControlName="email" type="email" placeholder="Correo"></ion-input>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-textarea formControlName="mensaje" placeholder="Mensaje" rows="4"></ion-textarea>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" class="ion-margin-top">Enviar</ion-button>
+  </form>
+
+  @if (mensajes.length) {
+    <ion-list class="ion-margin-top">
+      @for (mensaje of mensajes; track mensaje.fecha) {
+        <ion-item>
+          <ion-label>
+            <h3>{{ mensaje.email }}</h3>
+            <p>{{ mensaje.mensaje }}</p>
+            <ion-note>{{ mensaje.fecha | date:'short' }}</ion-note>
+          </ion-label>
+        </ion-item>
+      }
+    </ion-list>
+  }
+</ion-content>
