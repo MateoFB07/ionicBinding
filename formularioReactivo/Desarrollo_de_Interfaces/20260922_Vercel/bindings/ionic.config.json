@@ -1,7 +1,0 @@
-{
-  "name": "bindings",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
-}
