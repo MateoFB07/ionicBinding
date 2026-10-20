@@ -1,0 +1,7 @@
+{
+  "name": "StartInitial",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

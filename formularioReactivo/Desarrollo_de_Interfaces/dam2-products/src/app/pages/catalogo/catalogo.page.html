@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Publicaciones JSONPlaceholder</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (loading) {
+    <div class="loading-container" style="text-align: center; padding: 2rem;">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando posts de JSONPlaceholder...</p>
+    </div>
+  }
+
+  @if (error) {
+    <ion-card color="danger">
+      <ion-card-header>
+        <ion-card-title>Fallo de Red</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>{{ error }}</ion-card-content>
+    </ion-card>
+  }
+
+  @if (!loading && !error) {
+    <div class="grid-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
+      @for (post of posts; track post.id) {
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title style="font-size: 1.1rem; text-transform: capitalize;">
+              #{{ post.id }} - {{ post.title }}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>{{ post.body }}</p>
+          </ion-card-content>
+        </ion-card>
+      }
+    </div>
+  }
+</ion-content>

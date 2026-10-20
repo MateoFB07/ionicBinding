@@ -1,0 +1,33 @@
+<div class="contenedor-tabla">
+  <table *ngIf="listaDatos && listaDatos.length > 0; else sinDatos">
+    <thead>
+      <tr>
+        <th *ngFor="let col of columnas">{{ col }}</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let fila of listaDatos" (click)="clickFila(fila)">
+        <td>{{ fila.id }}</td>
+        <td>{{ fila.nombre }}</td>
+        <td>{{ fila.email }}</td>
+        <td>
+          <ion-chip [color]="fila.rol === 'Admin' ? 'primary' : 'medium'">
+            {{ fila.rol }}
+          </ion-chip>
+        </td>
+        <td>
+          <ion-button fill="clear" color="danger" size="small" (click)="clickBorrar($event, fila)">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #sinDatos>
+    <ion-text color="medium" class="ion-padding">
+      <p>No hay registros disponibles para mostrar.</p>
+    </ion-text>
+  </ng-template>
+</div>

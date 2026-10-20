@@ -1,0 +1,26 @@
+.contenedor-tabla {
+  width: 100%;
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--ion-color-light-shade);
+    }
+
+    th {
+      background-color: var(--ion-color-light);
+      font-weight: bold;
+    }
+
+    tr:hover {
+      background-color: var(--ion-color-light-tint);
+      cursor: pointer;
+    }
+  }
+}

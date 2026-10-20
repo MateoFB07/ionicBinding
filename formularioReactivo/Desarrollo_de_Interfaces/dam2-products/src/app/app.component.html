@@ -1,0 +1,11 @@
+<ion-app>
+  <ion-router-outlet></ion-router-outlet>
+  <!-- Punto 5: botón global para alternar entre modo oscuro y modo claro. -->
+  <ion-button
+    class="theme-toggle"
+    shape="round"
+    (click)="toggleTheme()"
+    [attr.aria-label]="isDarkMode ? 'Activar modo claro' : 'Activar modo oscuro'">
+    {{ isDarkMode ? 'Modo claro' : 'Modo oscuro' }}
+  </ion-button>
+</ion-app>
