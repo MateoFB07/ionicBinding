@@ -1,0 +1,26 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Nosotros</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <p>Empresa especializada en soluciones basadas en Angular, Ionic y Node.js.</p>
+    <p><strong>Distancia a nuestras oficinas:</strong></p>
+
+    @if (distancia() !== null) {
+      <p>{{ distancia() | number: '1.2-2' }} km</p>
+    } @else if (solicitandoUbicacion()) {
+      <p role="status">Obteniendo ubicación…</p>
+    } @else if (errorUbicacion()) {
+      <p role="alert">{{ errorUbicacion() }}</p>
+      <p>Comprueba que la ubicación esté activada y que la aplicación tenga permiso. Si estás en un interior, prueba cerca de una ventana o al aire libre.</p>
+    }
+
+    <ion-button
+      expand="block"
+      (click)="actualizarUbicacion()"
+      [disabled]="solicitandoUbicacion()">
+      {{ solicitandoUbicacion() ? 'Obteniendo ubicación…' : 'Obtener mi ubicación' }}
+    </ion-button>
+  </ion-card-content>
+</ion-card>
