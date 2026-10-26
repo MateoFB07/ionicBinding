@@ -1,112 +1,115 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+/* eslint-disable @angular-eslint/prefer-inject */
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonContent,
-  IonHeader,
-  IonInput,
-  IonSpinner,
+import { 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonContent, 
+  IonCard, 
+  IonCardHeader, 
+  IonCardTitle, 
+  IonCardContent, 
+  IonInput, 
+  IonButton, 
+  IonSpinner, 
   IonText,
-  IonTitle,
-  IonToolbar,
-  ToastController,
+  ToastController 
 } from '@ionic/angular';
 import { AuthService } from '../../services/auth';
-import { map, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
   imports: [
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardTitle,
-    IonContent,
-    IonHeader,
-    IonInput,
-    IonSpinner,
-    IonText,
-    IonTitle,
-    IonToolbar,
-    CommonModule,
-    ReactiveFormsModule
+    CommonModule, 
+    ReactiveFormsModule,
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonContent, 
+    IonCard, 
+    IonCardHeader, 
+    IonCardTitle, 
+    IonCardContent, 
+    IonInput, 
+    IonButton, 
+    IonSpinner, 
+    IonText
   ]
 })
 export class LoginPage implements OnInit {
-  miFormulario!: FormGroup;
-  cargando: boolean = false;
+  public loginForm!: FormGroup;
+  public isSubmitting: boolean = false;
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService,
+    private authService: AuthService,
     private router: Router,
-    private toastCtrl: ToastController
+    private toastController: ToastController
   ) {}
 
-  ngOnInit() {
-    this.miFormulario = this.fb.group({
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
-  async entrar() {
-    if (this.miFormulario.invalid) {
-      this.miFormulario.markAllAsTouched();
+  // Getter de conveniencia para acceder a los controles en la plantilla (como en el dossier)
+  get f() {
+    return this.loginForm.controls;
+  }
+
+  public async onSubmit(): Promise<void> {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched(); // Fuerza la visualizacion de errores
       return;
     }
 
-    this.cargando = true;
-    const email = this.miFormulario.value.email;
-    const pass = this.miFormulario.value.password;
+    this.isSubmitting = true;
+    const { email, password } = this.loginForm.value;
 
-    this.auth.login(email, pass).subscribe({
-      next: async (user) => {
-        this.cargando = false; // Desbloqueamos siempre el boton al terminar la respuesta
+    this.authService.login(email, password).subscribe({
+      next: async (usuario) => {
+        this.isSubmitting = false;
 
-        if (user) {
-          const toast = await this.toastCtrl.create({
-            message: `Hola de nuevo ${user.nombre}`,
+        if (usuario) {
+          const toast = await this.toastController.create({
+            message: `Bienvenido, ${usuario.nombre}`,
             duration: 2000,
-            color: 'success'
+            color: 'success',
+            position: 'bottom'
           });
           await toast.present();
 
-          if (user.rol === 'Admin') {
+          // Redirección según rol
+          if (usuario.rol === 'Admin') {
             this.router.navigate(['/dashboard']);
           } else {
             this.router.navigate(['/usuarios']);
           }
         } else {
-          // Si las credenciales fallan
-          const toastError = await this.toastCtrl.create({
-            message: 'Usuario o contraseña incorrectos',
-            duration: 2500,
-            color: 'danger'
-          });
-          await toastError.present();
+          await this.mostrarErrorToast('Credenciales incorrectas. Revisa el correo y la contraseña.');
         }
       },
       error: async () => {
-        this.cargando = false; // Si hay error de red, liberamos el boton
-        const toastError = await this.toastCtrl.create({
-          message: 'Error de conexión con el servicio',
-          duration: 2500,
-          color: 'danger'
-        });
-        await toastError.present();
+        this.isSubmitting = false;
+        await this.mostrarErrorToast('Error de conexión con el servicio de autenticación.');
       }
     });
+  }
+
+  private async mostrarErrorToast(mensaje: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2500,
+      color: 'danger',
+      position: 'bottom'
+    });
+    await toast.present();
   }
 }

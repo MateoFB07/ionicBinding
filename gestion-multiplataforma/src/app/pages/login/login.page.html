@@ -4,20 +4,21 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding ion-text-center">
+<ion-content class="ion-padding">
   <div class="contenedor-login">
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Acceso al sistema</ion-card-title>
+        <ion-card-title class="ion-text-center">Acceso al Sistema</ion-card-title>
       </ion-card-header>
 
       <ion-card-content>
-        <form [formGroup]="miFormulario" (ngSubmit)="entrar()">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           
           <!-- Campo Email -->
           <ion-input
             type="email"
-            label="Email"
+            inputmode="email"
+            label="Correo Electrónico"
             labelPlacement="floating"
             fill="outline"
             formControlName="email"
@@ -25,16 +26,22 @@
             class="ion-margin-bottom"
           ></ion-input>
 
-          <div *ngIf="miFormulario.get('email')?.touched && miFormulario.get('email')?.invalid" class="mensaje-error">
-            <ion-text color="danger" *ngIf="miFormulario.get('email')?.hasError('required')">
-              El email es obligatorio.
-            </ion-text>
-            <ion-text color="danger" *ngIf="miFormulario.get('email')?.hasError('email')">
-              Formato de email no válido.
-            </ion-text>
-          </div>
+          @if (f['email'].touched && f['email'].invalid) {
+            <div class="mensaje-error ion-margin-bottom">
+              @if (f['email'].errors?.['required']) {
+                <ion-text color="danger">
+                  El correo electrónico es obligatorio.
+                </ion-text>
+              }
+              @if (f['email'].errors?.['email']) {
+                <ion-text color="danger">
+                  Introduce un formato de correo válido.
+                </ion-text>
+              }
+            </div>
+          }
 
-          <!-- Campo Contraseña -->
+          <!-- Contraseña -->
           <ion-input
             type="password"
             label="Contraseña"
@@ -44,19 +51,33 @@
             class="ion-margin-bottom"
           ></ion-input>
 
-          <div *ngIf="miFormulario.get('password')?.touched && miFormulario.get('password')?.invalid" class="mensaje-error">
-            <ion-text color="danger" *ngIf="miFormulario.get('password')?.hasError('required')">
-              La contraseña es obligatoria.
-            </ion-text>
-            <ion-text color="danger" *ngIf="miFormulario.get('password')?.hasError('minlength')">
-              Mínimo 6 caracteres.
-            </ion-text>
-          </div>
+          @if (f['password'].touched && f['password'].invalid) {
+            <div class="mensaje-error ion-margin-bottom">
+              @if (f['password'].errors?.['required']) {
+                <ion-text color="danger">
+                  La contraseña es obligatoria.
+                </ion-text>
+              }
+              @if (f['password'].errors?.['minlength']) {
+                <ion-text color="danger">
+                  La contraseña debe tener al menos 6 caracteres.
+                </ion-text>
+              }
+            </div>
+          }
 
-          <!-- Botón de acceso -->
-          <ion-button expand="block" type="submit" [disabled]="cargando" class="ion-margin-top">
-            <ion-spinner *ngIf="cargando"></ion-spinner>
-            <span *ngIf="!cargando">Iniciar Sesión</span>
+          <!-- Botón de Envío -->
+          <ion-button 
+            expand="block" 
+            type="submit" 
+            [disabled]="isSubmitting" 
+            class="ion-margin-top"
+          >
+            @if (isSubmitting) {
+              <ion-spinner name="crescent"></ion-spinner>
+            } @else {
+              <span>Iniciar Sesión</span>
+            }
           </ion-button>
 
         </form>

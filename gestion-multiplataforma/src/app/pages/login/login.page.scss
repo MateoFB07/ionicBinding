@@ -1,0 +1,43 @@
+ion-content {
+  --background: #f9f1f2;
+}
+
+ion-header ion-toolbar {
+  --background: #54a82a;
+  --color: #9c1212;
+}
+
+.contenedor-login {
+  max-width: 400px;
+  margin: 15rem auto 0;
+
+  ion-card {
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(166, 193, 9, 0.08);
+    border: 1px solid #47a44c;
+
+    ion-card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+  }
+}
+
+ion-input {
+  --border-radius: 8px;
+  --highlight-color-focused: #eb2581;
+  font-size: 0.9rem;
+}
+
+.mensaje-error ion-text {
+  font-size: 0.78rem;
+}
+
+ion-button {
+  --border-radius: 8px;
+  --background: #2563eb;
+  text-transform: none;
+  font-weight: 600;
+  height: 44px;
+}

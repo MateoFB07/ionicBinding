@@ -1,13 +1,35 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>usuarios</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Lista de Usuarios</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">usuarios</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  
+  @if (cargando) {
+    <div class="ion-text-center ion-padding-top">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando datos...</p>
+    </div>
+  }
+
+  @if (!cargando) {
+    <ion-list>
+      @for (usuario of usuarios; track usuario) {
+        <ion-item>
+          <ion-label>
+            <h2>{{ usuario.nombre }}</h2>
+            <p>{{ usuario.email }}</p>
+          </ion-label>
+          <ion-badge slot="end" [color]="usuario.rol === 'Admin' ? 'tertiary' : 'medium'">
+            {{ usuario.rol }}
+          </ion-badge>
+        </ion-item>
+      }
+    </ion-list>
+  }
+
 </ion-content>
