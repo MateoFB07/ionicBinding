@@ -1,13 +1,94 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>dashboard</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-title>Panel de Control</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()" aria-label="Cerrar sesión">
+        Salir
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">dashboard</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <div class="contenedor-dashboard">
+    <!-- Saludo personalizado -->
+    <div class="header-bienvenida ion-margin-bottom">
+      <h2>Bienvenido, {{ usuario?.nombre }}</h2>
+      <p class="text-muted">
+        Rol activo: 
+        <ion-badge [color]="esAdmin ? 'primary' : 'secondary'">
+          {{ usuario?.rol }}
+        </ion-badge>
+      </p>
+    </div>
+
+    @if (cargando) {
+      <div class="ion-text-center ion-padding">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+      </div>
+    } @else {
+      <!-- Tarjetas KPI / Métricas Globales -->
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <!-- KPI 1: Total Empleados -->
+          <ion-col size="12" size-md="4">
+            <ion-card class="kpi-card">
+              <ion-card-header>
+                <ion-card-subtitle>Plantilla Total</ion-card-subtitle>
+                <ion-card-title>{{ totalEmpleados }} empleados</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <p>Registrados en la base de datos de Supabase</p>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+
+          <!-- KPI 2: Masa Salarial Total -->
+          <ion-col size="12" size-md="4">
+            <ion-card class="kpi-card">
+              <ion-card-header>
+                <ion-card-subtitle>Presupuesto Salarial</ion-card-subtitle>
+                <ion-card-title>
+                  {{ totalMasaSalarial | currency:'EUR':'symbol':'1.0-0' }}
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <p>Gasto anual acumulado de la plantilla</p>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+
+          <!-- KPI 3: Empleados Activos -->
+          <ion-col size="12" size-md="4">
+            <ion-card class="kpi-card">
+              <ion-card-header>
+                <ion-card-subtitle>Estado Operativo</ion-card-subtitle>
+                <ion-card-title>{{ empleadosActivos }} Activos</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <p>Personal actualmente en activo</p>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!-- Botón de Navegación Principal -->
+      <div class="ion-margin-top ion-text-center">
+        <ion-card class="tarjeta-acceso">
+          <ion-card-header>
+            <ion-card-title>Gestión Completa de Personal</ion-card-title>
+            <ion-card-subtitle>
+              Consulta la lista detallada en tarjetas, registra nuevos usuarios o elimina registros.
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-button expand="block" color="primary" (click)="irAUsuarios()">
+              Ver Lista de Empleados
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    }
+  </div>
 </ion-content>

@@ -1,106 +1,92 @@
-/* eslint-disable @angular-eslint/prefer-inject */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { 
-  IonHeader, 
-  IonToolbar, 
-  IonTitle, 
-  IonContent, 
-  IonCard, 
-  IonCardHeader, 
-  IonCardTitle, 
-  IonCardContent, 
-  IonInput, 
-  IonButton, 
-  IonSpinner, 
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonContent,
+  IonHeader,
+  IonInput,
+  IonSpinner,
   IonText,
-  ToastController 
+  IonTitle,
+  IonToolbar,
+  ToastController,
 } from '@ionic/angular';
 import { AuthService } from '../../services/auth';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
   imports: [
-    CommonModule, 
+    CommonModule,
     ReactiveFormsModule,
-    IonHeader, 
-    IonToolbar, 
-    IonTitle, 
-    IonContent, 
-    IonCard, 
-    IonCardHeader, 
-    IonCardTitle, 
-    IonCardContent, 
-    IonInput, 
-    IonButton, 
-    IonSpinner, 
-    IonText
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonInput,
+    IonButton,
+    IonSpinner,
+    IonText,
   ]
 })
 export class LoginPage implements OnInit {
   public loginForm!: FormGroup;
   public isSubmitting: boolean = false;
-
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private toastController: ToastController
-  ) {}
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly toastController = inject(ToastController);
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required]]
     });
   }
 
-  // Getter de conveniencia para acceder a los controles en la plantilla (como en el dossier)
   get f() {
     return this.loginForm.controls;
   }
 
   public async onSubmit(): Promise<void> {
     if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched(); // Fuerza la visualizacion de errores
+      await this.mostrarErrorToast('Por favor, completa los campos correctamente.');
       return;
     }
 
     this.isSubmitting = true;
     const { email, password } = this.loginForm.value;
 
-    this.authService.login(email, password).subscribe({
-      next: async (usuario) => {
-        this.isSubmitting = false;
+    try {
+      const usuario = await this.authService.login(email, password);
 
-        if (usuario) {
-          const toast = await this.toastController.create({
-            message: `Bienvenido, ${usuario.nombre}`,
-            duration: 2000,
-            color: 'success',
-            position: 'bottom'
-          });
-          await toast.present();
-
-          // Redirección según rol
-          if (usuario.rol === 'Admin') {
-            this.router.navigate(['/dashboard']);
-          } else {
-            this.router.navigate(['/usuarios']);
-          }
-        } else {
-          await this.mostrarErrorToast('Credenciales incorrectas. Revisa el correo y la contraseña.');
-        }
-      },
-      error: async () => {
-        this.isSubmitting = false;
-        await this.mostrarErrorToast('Error de conexión con el servicio de autenticación.');
+      if (usuario) {
+        await this.router.navigate(
+          [usuario.rol === 'Admin' ? '/dashboard' : '/usuarios']
+        );
+      } else {
+        await this.mostrarErrorToast('Correo o contraseña incorrectos.');
       }
-    });
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      await this.mostrarErrorToast(
+        'No se pudo conectar con Supabase. Comprueba tu conexión e inténtalo de nuevo.'
+      );
+    } finally {
+      this.isSubmitting = false;
+    }
   }
 
   private async mostrarErrorToast(mensaje: string): Promise<void> {

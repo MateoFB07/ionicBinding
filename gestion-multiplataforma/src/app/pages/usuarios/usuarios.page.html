@@ -1,4 +1,4 @@
-<ion-header class="ion-no-border">
+<ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/dashboard"></ion-back-button>
@@ -8,28 +8,49 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  
-  @if (cargando) {
-    <div class="ion-text-center ion-padding-top">
-      <ion-spinner name="crescent"></ion-spinner>
-      <p>Cargando datos...</p>
+  @if (cargando()) {
+    <div class="ion-text-center ion-padding" style="margin-top: 40px;">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p style="margin-top: 10px; color: #888;">Cargando datos...</p>
     </div>
-  }
+  } @else {
+    <!-- Gráfico Donut -->
+    <ion-card class="ion-margin-bottom">
+      <ion-card-header>
+        <ion-card-title>Distribución de Roles</ion-card-title>
+        <ion-card-subtitle>Proporción de usuarios registrados</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div style="max-width: 280px; margin: 0 auto; min-height: 200px;">
+          <canvas #graficoRoles></canvas>
+        </div>
+      </ion-card-content>
+    </ion-card>
 
-  @if (!cargando) {
-    <ion-list>
-      @for (usuario of usuarios; track usuario) {
-        <ion-item>
-          <ion-label>
-            <h2>{{ usuario.nombre }}</h2>
-            <p>{{ usuario.email }}</p>
-          </ion-label>
-          <ion-badge slot="end" [color]="usuario.rol === 'Admin' ? 'tertiary' : 'medium'">
-            {{ usuario.rol }}
-          </ion-badge>
-        </ion-item>
-      }
-    </ion-list>
+    <!-- Listado de empleados -->
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        @for (emp of empleados(); track emp.id) {
+          <ion-col size="12" size-md="6">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>{{ emp.nombre }}</ion-card-title>
+                <ion-card-subtitle>{{ emp.email }}</ion-card-subtitle>
+              </ion-card-header>
+              <ion-card-content>
+                <p><strong>Edad:</strong> {{ emp.edad }} años</p>
+                <p><strong>Salario:</strong> {{ emp.salario | currency:'EUR':'symbol':'1.0-0' }}</p>
+                <p>
+                  <strong>Rol:</strong> 
+                  <ion-badge [color]="emp.rol === 'Admin' ? 'primary' : 'medium'">
+                    {{ emp.rol }}
+                  </ion-badge>
+                </p>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
   }
-
 </ion-content>

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -11,11 +12,13 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage)
   },
   {
-    path: 'dashboard', // <-- Aquí es donde estaba puesta la "R" (dashboardR)
-    loadComponent: () => import('./pages/dashboard/dashboard.page').then(m => m.DashboardPage)
+    path: 'dashboard',
+    loadComponent: () => import('./pages/dashboard/dashboard.page').then(m => m.DashboardPage),
+    canActivate: [authGuard] // Ruta protegida
   },
   {
     path: 'usuarios',
-    loadComponent: () => import('./pages/usuarios/usuarios.page').then(m => m.UsuariosPage)
+    loadComponent: () => import('./pages/usuarios/usuarios.page').then(m => m.UsuariosPage),
+    canActivate: [authGuard] // Ruta protegida
   }
 ];
