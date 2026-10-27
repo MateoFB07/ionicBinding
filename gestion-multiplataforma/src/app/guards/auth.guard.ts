@@ -1,16 +1,22 @@
 import { inject } from '@angular/core';
-import { Router, CanActivateFn } from '@angular/router';
+import { Router, CanActivateFn, ActivatedRouteSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isAuthenticated()) {
-    return true; // Acceso permitido
+  // 1. Verificar si está autenticado
+  if (!authService.isAuthenticated()) {
+    return router.parseUrl('/login');
   }
 
-  // Redirigir al login si no está autenticado
-  router.navigate(['/login']);
-  return false;
+  // 2. Verificar si la ruta requiere rol de Admin
+  const rolRequerido = route.data['rol'] as string;
+  if (rolRequerido && authService.getRol() !== rolRequerido) {
+    // Si no es Admin y la ruta lo requiere, redirigir al Dashboard
+    return router.parseUrl('/dashboard');
+  }
+
+  return true;
 };

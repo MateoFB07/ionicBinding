@@ -1,0 +1,9 @@
+<ion-card class="widget-card" [style.border-left]="'5px solid ' + colorBorde" (click)="notificarClic()">
+  <ion-card-header>
+    <ion-card-subtitle>{{ subtitulo }}</ion-card-subtitle>
+    <ion-card-title [style.color]="colorBorde">{{ valor }}</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <p class="titulo-widget" style="font-weight: 600; margin: 0;">{{ titulo }}</p>
+  </ion-card-content>
+</ion-card>

@@ -1,0 +1,50 @@
+<div class="contenedor-tabla">
+  <!-- Buscador Integrado (Bidi Binding con ngModel) -->
+  <ion-searchbar 
+    [(ngModel)]="textoBusqueda" 
+    placeholder="Buscar por nombre, email o rol..." 
+    animated="true">
+  </ion-searchbar>
+
+  <!-- Lista de Tarjetas / Grid -->
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      @for (emp of datosFiltrados; track emp.id) {
+        <ion-col size="12" size-md="6">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>{{ emp.nombre }}</ion-card-title>
+              <ion-card-subtitle>{{ emp.email }}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <p><strong>Edad:</strong> {{ emp.edad }} años</p>
+              <p><strong>Salario:</strong> {{ emp.salario | currency:'EUR':'symbol':'1.0-0' }}</p>
+              <p>
+                <strong>Rol:</strong> 
+                <ion-badge [color]="emp.rol === 'Admin' ? 'primary' : 'medium'">
+                  {{ emp.rol }}
+                </ion-badge>
+              </p>
+
+              @if (esAdmin) {
+                <ion-button 
+                  color="danger" 
+                  size="small" 
+                  class="ion-margin-top" 
+                  (click)="solicitarEliminacion(emp.id)">
+                  Eliminar
+                </ion-button>
+              }
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      } @empty {
+        <ion-col size="12">
+          <div class="ion-text-center ion-padding" style="color: #888;">
+            <p>No se encontraron resultados para la búsqueda.</p>
+          </div>
+        </ion-col>
+      }
+    </ion-row>
+  </ion-grid>
+</div>

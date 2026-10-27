@@ -9,16 +9,20 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage)
+    loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage),
   },
   {
     path: 'dashboard',
     loadComponent: () => import('./pages/dashboard/dashboard.page').then(m => m.DashboardPage),
-    canActivate: [authGuard] // Ruta protegida
+    canActivate: [authGuard]
   },
   {
     path: 'usuarios',
     loadComponent: () => import('./pages/usuarios/usuarios.page').then(m => m.UsuariosPage),
-    canActivate: [authGuard] // Ruta protegida
+    canActivate: [authGuard]
+  },
+  {
+    path: '**',
+    redirectTo: 'login'
   }
 ];

@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
-import { supabase } from './supabase.client';
 import { Empleado } from '../models/empleado.interface';
 import { Usuario } from '../models/user.interface';
+import { supabase } from './supabase.client';
+
+export type NuevoEmpleado = Omit<Empleado, 'id' | 'created_at'> & {
+  contraseña: string;
+};
 
 @Injectable({
   providedIn: 'root'
@@ -12,32 +16,25 @@ export class AuthService {
   constructor() {
     const sesion = localStorage.getItem('usuario_sesion');
     if (sesion) {
-      this.usuarioActual = JSON.parse(sesion);
+      this.usuarioActual = JSON.parse(sesion) as Usuario;
     }
   }
 
-  /**
-   * Autentica al usuario comprobando correo y la columna 'contraseña' en Supabase.
-   */
   public async login(email: string, pass: string): Promise<Usuario | null> {
     const emailLimpio = email.trim().toLowerCase();
-    const passLimpia = pass;
-
-    // Consulta directa a la columna 'contraseña' en la tabla 'empleados'
     const { data, error } = await supabase
       .from('empleados')
       .select('id, nombre, email, rol')
       .ilike('email', emailLimpio)
-      .eq('contraseña', passLimpia)
+      .eq('contraseña', pass)
       .maybeSingle();
 
     if (error) {
-      console.error('Error al consultar en Supabase:', error);
+      console.error('Error al consultar credenciales en Supabase:', error);
       throw error;
     }
 
     if (!data) {
-      console.warn('Credenciales incorrectas: email o contraseña no coincidentes.');
       return null;
     }
 
@@ -53,9 +50,22 @@ export class AuthService {
     return usuario;
   }
 
-  /**
-   * Obtiene la lista completa de empleados desde Supabase.
-   */
+  public async existeEmail(email: string): Promise<boolean> {
+    const emailLimpio = email.trim().toLowerCase();
+    const { data, error } = await supabase
+      .from('empleados')
+      .select('id')
+      .ilike('email', emailLimpio)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error al verificar si el correo ya existe:', error);
+      throw error;
+    }
+
+    return data !== null;
+  }
+
   public async getEmpleados(): Promise<Empleado[]> {
     const { data, error } = await supabase
       .from('empleados')
@@ -67,17 +77,14 @@ export class AuthService {
       throw error;
     }
 
-    return data as Empleado[];
+    return data;
   }
 
-  /**
-   * Crea un nuevo empleado en la base de datos.
-   */
-  public async crearEmpleado(nuevo: Omit<Empleado, 'id' | 'created_at'>): Promise<Empleado> {
+  public async crearEmpleado(nuevo: NuevoEmpleado): Promise<Empleado> {
     const { data, error } = await supabase
       .from('empleados')
-      .insert([nuevo])
-      .select()
+      .insert(nuevo)
+      .select('id, created_at, nombre, email, edad, salario, activo, rol')
       .single();
 
     if (error) {
@@ -85,12 +92,9 @@ export class AuthService {
       throw error;
     }
 
-    return data as Empleado;
+    return data;
   }
 
-  /**
-   * Elimina un empleado por su ID.
-   */
   public async eliminarEmpleado(id: number): Promise<void> {
     const { error } = await supabase
       .from('empleados')
@@ -103,24 +107,15 @@ export class AuthService {
     }
   }
 
-  /**
-   * Cierra la sesión del usuario actual.
-   */
   public logout(): void {
     this.usuarioActual = null;
     localStorage.removeItem('usuario_sesion');
   }
 
-  /**
-   * Comprueba si hay una sesión de usuario guardada.
-   */
   public isAuthenticated(): boolean {
     return this.usuarioActual !== null;
   }
 
-  /**
-   * Devuelve el rol del usuario actual.
-   */
   public getRol(): string | null {
     return this.usuarioActual?.rol ?? null;
   }
