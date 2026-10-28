@@ -57,4 +57,30 @@ ion-content {
     height: 48px;
     margin-top: 1.5rem;
   }
+
+  .demo-access {
+    margin-bottom: 1rem;
+
+    p {
+      margin: 0 0 0.5rem;
+      color: #cbd5e1;
+      font-size: 0.82rem;
+      text-align: center;
+    }
+  }
+
+  .demo-access-buttons {
+    display: flex;
+    gap: 0.5rem;
+
+    ion-button {
+      flex: 1;
+      --background: transparent;
+      --box-shadow: none;
+      --border-radius: 10px;
+      height: 40px;
+      margin: 0;
+      font-size: 0.8rem;
+    }
+  }
 }

@@ -3,9 +3,14 @@ import { Empleado } from '../models/empleado.interface';
 import { Usuario } from '../models/user.interface';
 import { supabase } from './supabase.client';
 
-export type NuevoEmpleado = Omit<Empleado, 'id' | 'created_at'> & {
-  contraseña: string;
-};
+export type NuevoEmpleado = Omit<Empleado, 'id' | 'created_at'>;
+
+export class PerfilEmpleadoNoEncontradoError extends Error {
+  constructor(public readonly email: string) {
+    super(`Supabase Auth ha validado ${email}, pero no hay un perfil visible con ese correo en public.empleados.`);
+    this.name = 'PerfilEmpleadoNoEncontradoError';
+  }
+}
 
 @Injectable({
   providedIn: 'root'
@@ -22,27 +27,47 @@ export class AuthService {
 
   public async login(email: string, pass: string): Promise<Usuario | null> {
     const emailLimpio = email.trim().toLowerCase();
-    const { data, error } = await supabase
-      .from('empleados')
-      .select('id, nombre, email, rol')
-      .ilike('email', emailLimpio)
-      .eq('contraseña', pass)
-      .maybeSingle();
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      email: emailLimpio,
+      password: pass
+    });
 
-    if (error) {
-      console.error('Error al consultar credenciales en Supabase:', error);
-      throw error;
+    if (authError) {
+      if (authError.code === 'invalid_credentials' || authError.code === 'user_not_found') {
+        return null;
+      }
+      console.error('Error al autenticar con Supabase Auth:', authError);
+      throw authError;
     }
 
-    if (!data) {
-      return null;
+    const emailAutenticado = authData.user.email;
+    if (!emailAutenticado) {
+      await this.cerrarSesionAuth();
+      throw new Error('La cuenta autenticada no tiene un correo electrónico.');
+    }
+
+    const { data: perfil, error: perfilError } = await supabase
+      .from('empleados')
+      .select('id, nombre, email, rol')
+      .ilike('email', emailAutenticado)
+      .maybeSingle();
+
+    if (perfilError) {
+      await this.cerrarSesionAuth();
+      console.error('Error al consultar el perfil del empleado:', perfilError);
+      throw perfilError;
+    }
+
+    if (!perfil) {
+      await this.cerrarSesionAuth();
+      throw new PerfilEmpleadoNoEncontradoError(emailAutenticado);
     }
 
     const usuario: Usuario = {
-      id: data.id,
-      nombre: data.nombre,
-      email: data.email,
-      rol: data.rol || 'User'
+      id: perfil.id,
+      nombre: perfil.nombre,
+      email: perfil.email,
+      rol: perfil.rol === 'Admin' ? 'Admin' : 'User'
     };
 
     this.usuarioActual = usuario;
@@ -81,6 +106,10 @@ export class AuthService {
   }
 
   public async crearEmpleado(nuevo: NuevoEmpleado): Promise<Empleado> {
+    if (this.getRol() !== 'Admin') {
+      throw new Error('Solo los administradores pueden insertar empleados.');
+    }
+
     const { data, error } = await supabase
       .from('empleados')
       .insert(nuevo)
@@ -107,9 +136,14 @@ export class AuthService {
     }
   }
 
-  public logout(): void {
+  public async logout(): Promise<void> {
+    const { error } = await supabase.auth.signOut();
     this.usuarioActual = null;
     localStorage.removeItem('usuario_sesion');
+    if (error) {
+      console.error('Error al cerrar la sesión de Supabase Auth:', error);
+      throw error;
+    }
   }
 
   public isAuthenticated(): boolean {
@@ -118,5 +152,13 @@ export class AuthService {
 
   public getRol(): string | null {
     return this.usuarioActual?.rol ?? null;
+  }
+
+  private async cerrarSesionAuth(): Promise<void> {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error('No se pudo limpiar la sesión de Supabase Auth:', error);
+      throw error;
+    }
   }
 }

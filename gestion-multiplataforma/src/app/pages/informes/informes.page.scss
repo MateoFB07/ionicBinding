@@ -1,0 +1,72 @@
+.reports-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem 0;
+  color: #e2e8f0;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #818cf8;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+h1 {
+  margin: 0.4rem 0;
+  color: #f8fafc;
+}
+
+.description,
+.report-card p {
+  color: #94a3b8;
+}
+
+.report-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1.5rem 0 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid #26354d;
+  border-radius: 16px;
+  background: #141f33;
+}
+
+.report-card h2 {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 1.1rem;
+}
+
+.report-card p {
+  margin: 0.4rem 0 0;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2rem 0;
+  color: #94a3b8;
+}
+
+@media (max-width: 640px) {
+  .report-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .actions,
+  .actions ion-button {
+    width: 100%;
+  }
+}

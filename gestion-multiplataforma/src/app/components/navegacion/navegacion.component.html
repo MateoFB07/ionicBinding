@@ -1,0 +1,22 @@
+<ion-toolbar color="primary">
+  <nav class="nav-links" aria-label="Navegación principal">
+    <ion-button routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      Inicio
+    </ion-button>
+    <ion-button
+      routerLink="/usuarios"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }">
+      Usuarios
+    </ion-button>
+    @if (esAdmin) {
+      <ion-button routerLink="/usuarios/nuevo" routerLinkActive="active">
+        Alta de empleado
+      </ion-button>
+    }
+    <ion-button routerLink="/informes" routerLinkActive="active">
+      Informes
+    </ion-button>
+  </nav>
+  <ion-button slot="end" (click)="cerrarSesion()">Salir</ion-button>
+</ion-toolbar>

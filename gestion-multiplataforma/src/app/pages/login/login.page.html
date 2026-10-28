@@ -12,6 +12,26 @@
       </ion-card-header>
 
       <ion-card-content>
+        <div class="demo-access" aria-label="Accesos rápidos de demostración">
+          <p>Acceso rápido: selecciona una cuenta para entrar automáticamente.</p>
+          <div class="demo-access-buttons">
+            <ion-button
+              type="button"
+              fill="outline"
+              [disabled]="isSubmitting"
+              (click)="accesoDemoDirecto('admin')">
+              Entrar Admin
+            </ion-button>
+            <ion-button
+              type="button"
+              fill="outline"
+              [disabled]="isSubmitting"
+              (click)="accesoDemoDirecto('usuario')">
+              Entrar Usuario
+            </ion-button>
+          </div>
+        </div>
+
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           
           <!-- Campo Email -->

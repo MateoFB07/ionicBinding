@@ -14,8 +14,7 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   // 2. Verificar si la ruta requiere rol de Admin
   const rolRequerido = route.data['rol'] as string;
   if (rolRequerido && authService.getRol() !== rolRequerido) {
-    // Si no es Admin y la ruta lo requiere, redirigir al Dashboard
-    return router.parseUrl('/dashboard');
+    return router.parseUrl('/inicio');
   }
 
   return true;

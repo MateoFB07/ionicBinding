@@ -2,42 +2,96 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
-  IonSearchbar, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, 
-  IonCardTitle, IonCardSubtitle, IonCardContent, IonBadge, IonButton 
+  IonSearchbar,
+  IonBadge,
+  IonButton,
+  IonSelect,
+  IonSelectOption
 } from '@ionic/angular';
 import { Empleado } from '../../models/empleado.interface';
+
+type ColumnaOrden = 'nombre' | 'email' | 'edad' | 'salario' | 'rol' | 'activo';
+type DireccionOrden = 'asc' | 'desc';
 
 @Component({
   selector: 'app-tabla-usuarios',
   templateUrl: './tabla.usuario.component.html',
+  styleUrls: ['./tabla.usuario.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, CurrencyPipe, FormsModule, IonSearchbar, IonGrid, 
-    IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, 
-    IonCardContent, IonBadge, IonButton
+    CommonModule,
+    CurrencyPipe,
+    FormsModule,
+    IonSearchbar,
+    IonBadge,
+    IonButton,
+    IonSelect,
+    IonSelectOption
   ]
 })
 export class TablaUsuariosComponent {
-  // Props / Inputs desde el padre
   @Input({ required: true }) datos: Empleado[] = [];
-  @Input() esAdmin: boolean = false;
+  @Input() esAdmin = false;
 
-  // Output hacia el padre al solicitar eliminar un registro
   @Output() alEliminar = new EventEmitter<number>();
 
-  public textoBusqueda: string = '';
+  public textoBusqueda = '';
+  public filtroRol: 'todos' | 'Admin' | 'User' = 'todos';
+  public filtroEstado: 'todos' | 'activo' | 'inactivo' = 'todos';
+  public columnaOrden: ColumnaOrden = 'nombre';
+  public direccionOrden: DireccionOrden = 'asc';
 
-  // Getter reactivo para filtrar datos en tiempo real sin modificar la lista original
   get datosFiltrados(): Empleado[] {
-    if (!this.textoBusqueda.trim()) {
-      return this.datos;
+    const query = this.textoBusqueda.trim().toLocaleLowerCase('es');
+
+    return this.datos
+      .filter((empleado) => {
+        const coincideBusqueda = !query
+          || empleado.nombre.toLocaleLowerCase('es').includes(query)
+          || empleado.email.toLocaleLowerCase('es').includes(query)
+          || empleado.rol.toLocaleLowerCase('es').includes(query);
+        const coincideRol = this.filtroRol === 'todos' || empleado.rol === this.filtroRol;
+        const coincideEstado = this.filtroEstado === 'todos'
+          || empleado.activo === (this.filtroEstado === 'activo');
+
+        return coincideBusqueda && coincideRol && coincideEstado;
+      })
+      .sort((a, b) => this.comparar(a, b));
+  }
+
+  ordenarPor(columna: ColumnaOrden): void {
+    if (this.columnaOrden === columna) {
+      this.direccionOrden = this.direccionOrden === 'asc' ? 'desc' : 'asc';
+      return;
     }
-    const query = this.textoBusqueda.toLowerCase();
-    return this.datos.filter(emp => 
-      emp.nombre.toLowerCase().includes(query) || 
-      emp.email.toLowerCase().includes(query) ||
-      (emp.rol && emp.rol.toLowerCase().includes(query))
-    );
+
+    this.columnaOrden = columna;
+    this.direccionOrden = 'asc';
+  }
+
+  indicadorOrden(columna: ColumnaOrden): string {
+    if (this.columnaOrden !== columna) {
+      return '↕';
+    }
+    return this.direccionOrden === 'asc' ? '↑' : '↓';
+  }
+
+  private comparar(a: Empleado, b: Empleado): number {
+    const valorA = a[this.columnaOrden];
+    const valorB = b[this.columnaOrden];
+    let comparacion: number;
+
+    if (typeof valorA === 'number' && typeof valorB === 'number') {
+      comparacion = valorA - valorB;
+    } else if (typeof valorA === 'boolean' && typeof valorB === 'boolean') {
+      comparacion = Number(valorA) - Number(valorB);
+    } else {
+      comparacion = String(valorA).localeCompare(String(valorB), 'es', {
+        sensitivity: 'base'
+      });
+    }
+
+    return this.direccionOrden === 'asc' ? comparacion : -comparacion;
   }
 
   solicitarEliminacion(id: number): void {

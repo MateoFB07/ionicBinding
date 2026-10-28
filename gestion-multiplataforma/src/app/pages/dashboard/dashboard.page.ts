@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { 
   IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, 
   IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, 
-  IonBadge, IonButton, IonButtons, IonSpinner 
+  IonBadge, IonButton, IonSpinner
 } from '@ionic/angular';
 import { AuthService } from '../../services/auth';
 import { Usuario } from '../../models/user.interface';
 import { Empleado } from '../../models/empleado.interface';
+import { NavegacionComponent } from '../../components/navegacion/navegacion.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +19,7 @@ import { Empleado } from '../../models/empleado.interface';
   imports: [
     CommonModule, CurrencyPipe, IonHeader, IonToolbar, IonTitle, IonContent, 
     IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, 
-    IonCardSubtitle, IonCardContent, IonBadge, IonButton, IonButtons, IonSpinner
+    IonCardSubtitle, IonCardContent, IonBadge, IonButton, IonSpinner, NavegacionComponent
   ]
 })
 export class DashboardPage implements OnInit {
@@ -34,13 +35,16 @@ export class DashboardPage implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     const sesion = localStorage.getItem('usuario_sesion');
     if (sesion) {
       this.usuario = JSON.parse(sesion);
     }
 
     this.esAdmin = this.authService.getRol() === 'Admin';
+  }
+
+  async ionViewWillEnter(): Promise<void> {
     await this.cargarMetricas();
   }
 
@@ -64,8 +68,4 @@ export class DashboardPage implements OnInit {
     this.router.navigate(['/usuarios']);
   }
 
-  public logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
 }

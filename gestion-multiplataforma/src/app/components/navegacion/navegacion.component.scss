@@ -1,0 +1,23 @@
+:host {
+  display: contents;
+}
+
+ion-toolbar {
+  --min-height: 44px;
+}
+
+.nav-links {
+  display: flex;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+ion-button {
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+  text-transform: none;
+}
+
+ion-button.active {
+  --background: rgba(255, 255, 255, 0.16);
+}

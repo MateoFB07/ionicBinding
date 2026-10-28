@@ -1,0 +1,133 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/usuarios"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Alta de empleado</ion-title>
+  </ion-toolbar>
+  <app-navegacion></app-navegacion>
+</ion-header>
+
+<ion-content>
+  <main class="page-shell">
+    <section class="page-heading">
+      <div>
+        <p class="eyebrow">NUEVO REGISTRO</p>
+        <h1>Registrar empleado</h1>
+        <p class="page-description">Completa la información para crear una nueva cuenta.</p>
+      </div>
+      <span class="required-note"><span>*</span> Campos obligatorios</span>
+    </section>
+
+    <ion-card class="employee-card">
+      <ion-card-content>
+        <form [formGroup]="empleadoForm" (ngSubmit)="guardarEmpleado()">
+          <section class="form-section" aria-labelledby="personal-heading">
+            <div class="section-heading">
+              <span class="section-number">01</span>
+              <div>
+                <h2 id="personal-heading">Datos personales</h2>
+                <p>Información del perfil asociado a la cuenta creada en Supabase Auth.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-field">
+                <ion-item lines="none" class="form-control">
+                  <ion-label position="stacked">Nombre completo <span class="required">*</span></ion-label>
+                  <ion-input id="nombre" type="text" formControlName="nombre" placeholder="Ej. Ana López" autocomplete="name"></ion-input>
+                </ion-item>
+                @if (empleadoForm.get('nombre')?.touched && empleadoForm.get('nombre')?.hasError('required')) {
+                  <p class="field-error">El nombre es obligatorio.</p>
+                } @else if (empleadoForm.get('nombre')?.touched && empleadoForm.get('nombre')?.hasError('minlength')) {
+                  <p class="field-error">Introduce al menos 3 caracteres.</p>
+                }
+              </div>
+
+              <div class="form-field">
+                <ion-item lines="none" class="form-control">
+                  <ion-label position="stacked">Correo electrónico <span class="required">*</span></ion-label>
+                  <ion-input id="email" type="email" formControlName="email" placeholder="nombre@empresa.com" autocomplete="email"></ion-input>
+                  @if (empleadoForm.get('email')?.pending) {
+                    <ion-spinner name="dots" slot="end" color="primary"></ion-spinner>
+                  }
+                </ion-item>
+                @if (empleadoForm.get('email')?.touched && empleadoForm.get('email')?.hasError('required')) {
+                  <p class="field-error">El correo electrónico es obligatorio.</p>
+                } @else if (empleadoForm.get('email')?.touched && empleadoForm.get('email')?.hasError('email')) {
+                  <p class="field-error">Introduce un correo electrónico válido.</p>
+                } @else if (empleadoForm.get('email')?.touched && empleadoForm.get('email')?.hasError('emailRepetido')) {
+                  <p class="field-error">Este correo ya se encuentra registrado.</p>
+                } @else if (empleadoForm.get('email')?.touched && empleadoForm.get('email')?.hasError('emailValidationUnavailable')) {
+                  <p class="field-error">No se pudo comprobar el correo. Revisa la conexión e inténtalo de nuevo.</p>
+                }
+              </div>
+
+            </div>
+          </section>
+
+          <section class="form-section" aria-labelledby="employment-heading">
+            <div class="section-heading">
+              <span class="section-number">02</span>
+              <div>
+                <h2 id="employment-heading">Información laboral</h2>
+                <p>Define las condiciones y permisos de la cuenta.</p>
+              </div>
+            </div>
+
+            <div class="form-grid employment-grid">
+              <div class="form-field">
+                <ion-item lines="none" class="form-control">
+                  <ion-label position="stacked">Edad <span class="required">*</span></ion-label>
+                  <ion-input id="edad" type="number" formControlName="edad" min="16" placeholder="Ej. 28"></ion-input>
+                </ion-item>
+                @if (empleadoForm.get('edad')?.touched && empleadoForm.get('edad')?.hasError('required')) {
+                  <p class="field-error">La edad es obligatoria.</p>
+                } @else if (empleadoForm.get('edad')?.touched && empleadoForm.get('edad')?.hasError('min')) {
+                  <p class="field-error">La edad mínima es de 16 años.</p>
+                }
+              </div>
+
+              <div class="form-field">
+                <ion-item lines="none" class="form-control">
+                  <ion-label position="stacked">Salario mensual (€) <span class="required">*</span></ion-label>
+                  <ion-input id="salario" type="number" formControlName="salario" min="0" placeholder="Ej. 1800"></ion-input>
+                </ion-item>
+                @if (empleadoForm.get('salario')?.touched && empleadoForm.get('salario')?.hasError('required')) {
+                  <p class="field-error">El salario es obligatorio.</p>
+                } @else if (empleadoForm.get('salario')?.touched && empleadoForm.get('salario')?.hasError('min')) {
+                  <p class="field-error">El salario no puede ser negativo.</p>
+                }
+              </div>
+
+              <div class="form-field">
+                <ion-item lines="none" class="form-control">
+                  <ion-label position="stacked">Rol asignado <span class="required">*</span></ion-label>
+                  <ion-select id="rol" formControlName="rol" interface="popover">
+                    <ion-select-option value="User">Usuario</ion-select-option>
+                    <ion-select-option value="Admin">Administrador</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </div>
+            </div>
+          </section>
+
+          <div class="form-actions">
+            <p>Las credenciales se gestionan en Supabase Auth, nunca en el perfil.</p>
+            <ion-button
+              type="submit"
+              color="primary"
+              [disabled]="empleadoForm.pending || empleadoForm.invalid || guardando()">
+              @if (guardando()) {
+                <ion-spinner name="crescent"></ion-spinner>
+                <span>Guardando...</span>
+              } @else {
+                Registrar empleado
+              }
+            </ion-button>
+          </div>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </main>
+</ion-content>

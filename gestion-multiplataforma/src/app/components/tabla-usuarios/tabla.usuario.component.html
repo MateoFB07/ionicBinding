@@ -1,50 +1,100 @@
-<div class="contenedor-tabla">
-  <!-- Buscador Integrado (Bidi Binding con ngModel) -->
-  <ion-searchbar 
-    [(ngModel)]="textoBusqueda" 
-    placeholder="Buscar por nombre, email o rol..." 
-    animated="true">
-  </ion-searchbar>
+<section class="table-panel" aria-label="Listado de empleados">
+  <div class="table-toolbar">
+    <ion-searchbar
+      [(ngModel)]="textoBusqueda"
+      placeholder="Buscar por nombre, correo o rol"
+      aria-label="Buscar empleados">
+    </ion-searchbar>
 
-  <!-- Lista de Tarjetas / Grid -->
-  <ion-grid class="ion-no-padding">
-    <ion-row>
-      @for (emp of datosFiltrados; track emp.id) {
-        <ion-col size="12" size-md="6">
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>{{ emp.nombre }}</ion-card-title>
-              <ion-card-subtitle>{{ emp.email }}</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-              <p><strong>Edad:</strong> {{ emp.edad }} años</p>
-              <p><strong>Salario:</strong> {{ emp.salario | currency:'EUR':'symbol':'1.0-0' }}</p>
-              <p>
-                <strong>Rol:</strong> 
-                <ion-badge [color]="emp.rol === 'Admin' ? 'primary' : 'medium'">
-                  {{ emp.rol }}
-                </ion-badge>
-              </p>
+    <ion-select
+      [(ngModel)]="filtroRol"
+      interface="popover"
+      aria-label="Filtrar por rol"
+      placeholder="Todos los roles">
+      <ion-select-option value="todos">Todos los roles</ion-select-option>
+      <ion-select-option value="Admin">Administrador</ion-select-option>
+      <ion-select-option value="User">Usuario</ion-select-option>
+    </ion-select>
 
-              @if (esAdmin) {
-                <ion-button 
-                  color="danger" 
-                  size="small" 
-                  class="ion-margin-top" 
+    <ion-select
+      [(ngModel)]="filtroEstado"
+      interface="popover"
+      aria-label="Filtrar por estado"
+      placeholder="Todos los estados">
+      <ion-select-option value="todos">Todos los estados</ion-select-option>
+      <ion-select-option value="activo">Activos</ion-select-option>
+      <ion-select-option value="inactivo">Inactivos</ion-select-option>
+    </ion-select>
+  </div>
+
+  <p class="result-count">
+    {{ datosFiltrados.length }} de {{ datos.length }} empleados
+  </p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col" [attr.aria-sort]="columnaOrden === 'nombre' ? (direccionOrden === 'asc' ? 'ascending' : 'descending') : 'none'">
+            <button type="button" (click)="ordenarPor('nombre')">Nombre {{ indicadorOrden('nombre') }}</button>
+          </th>
+          <th scope="col" [attr.aria-sort]="columnaOrden === 'email' ? (direccionOrden === 'asc' ? 'ascending' : 'descending') : 'none'">
+            <button type="button" (click)="ordenarPor('email')">Correo {{ indicadorOrden('email') }}</button>
+          </th>
+          <th scope="col" [attr.aria-sort]="columnaOrden === 'edad' ? (direccionOrden === 'asc' ? 'ascending' : 'descending') : 'none'">
+            <button type="button" (click)="ordenarPor('edad')">Edad {{ indicadorOrden('edad') }}</button>
+          </th>
+          <th scope="col" [attr.aria-sort]="columnaOrden === 'salario' ? (direccionOrden === 'asc' ? 'ascending' : 'descending') : 'none'">
+            <button type="button" (click)="ordenarPor('salario')">Salario {{ indicadorOrden('salario') }}</button>
+          </th>
+          <th scope="col" [attr.aria-sort]="columnaOrden === 'rol' ? (direccionOrden === 'asc' ? 'ascending' : 'descending') : 'none'">
+            <button type="button" (click)="ordenarPor('rol')">Rol {{ indicadorOrden('rol') }}</button>
+          </th>
+          <th scope="col" [attr.aria-sort]="columnaOrden === 'activo' ? (direccionOrden === 'asc' ? 'ascending' : 'descending') : 'none'">
+            <button type="button" (click)="ordenarPor('activo')">Estado {{ indicadorOrden('activo') }}</button>
+          </th>
+          @if (esAdmin) {
+            <th scope="col">Acciones</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (emp of datosFiltrados; track emp.id) {
+          <tr>
+            <td class="employee-name">{{ emp.nombre }}</td>
+            <td>{{ emp.email }}</td>
+            <td>{{ emp.edad }} años</td>
+            <td>{{ emp.salario | currency:'EUR':'symbol':'1.0-0' }}</td>
+            <td>
+              <ion-badge [color]="emp.rol === 'Admin' ? 'primary' : 'medium'">
+                {{ emp.rol === 'Admin' ? 'Administrador' : 'Usuario' }}
+              </ion-badge>
+            </td>
+            <td>
+              <ion-badge [color]="emp.activo ? 'success' : 'medium'">
+                {{ emp.activo ? 'Activo' : 'Inactivo' }}
+              </ion-badge>
+            </td>
+            @if (esAdmin) {
+              <td>
+                <ion-button
+                  color="danger"
+                  fill="clear"
+                  size="small"
                   (click)="solicitarEliminacion(emp.id)">
                   Eliminar
                 </ion-button>
-              }
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      } @empty {
-        <ion-col size="12">
-          <div class="ion-text-center ion-padding" style="color: #888;">
-            <p>No se encontraron resultados para la búsqueda.</p>
-          </div>
-        </ion-col>
-      }
-    </ion-row>
-  </ion-grid>
-</div>
+              </td>
+            }
+          </tr>
+        } @empty {
+          <tr>
+            <td class="empty-state" [attr.colspan]="esAdmin ? 7 : 6">
+              No hay empleados que coincidan con los filtros.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
