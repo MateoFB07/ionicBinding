@@ -1,9 +1,47 @@
-.widget-card {
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.header-bienvenida {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.widget-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+.titulo-bienvenida {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--ion-text-color, #1f2937);
+}
+
+.titulo-tarjeta {
+  color: var(--ion-text-color, #1f2937);
+  font-weight: 600;
+}
+
+/* --- MODO CLARO (Default) --- */
+ion-content {
+  --background: #f8fafc;
+  --color: #0f172a;
+}
+
+ion-card {
+  --background: #ffffff;
+  --color: #0f172a;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* --- MODO OSCURO GLOBAL --- */
+:host-context(body.dark) {
+  ion-content {
+    --background: #0f172a !important;
+    --color: #f8fafc !important;
+  }
+
+  ion-card {
+    --background: #1e293b !important;
+    --color: #f8fafc !important;
+  }
+
+  .titulo-bienvenida,
+  .titulo-tarjeta {
+    color: #f8fafc !important;
+  }
 }

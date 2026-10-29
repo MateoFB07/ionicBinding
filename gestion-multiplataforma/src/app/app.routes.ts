@@ -9,7 +9,7 @@ export const routes: Routes = [
   },
   {
     path: 'inicio',
-    loadComponent: () => import('./pages/dashboard/dashboard.page').then(m => m.DashboardPage),
+    loadComponent: () => import('./pages/home/home.page').then(m => m.DashboardPage),
     canActivate: [authGuard]
   },
   {
