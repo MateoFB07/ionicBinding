@@ -1,4 +1,4 @@
-# Sistema de Gestión Multiplataforma (PWA/Híbrida)
+# Sistema de Gestión Multiplataforma
 
 ## 📋 Información de la Entrega Académica
 
@@ -15,7 +15,7 @@ Esta aplicación es una solución de software multiplataforma (Web y PWA Híbrid
 
 El sistema implementa una arquitectura desacoplada basada en el patrón **MVVM (Model-View-ViewModel)** utilizando **Ionic 8** con **Angular (Standalone Components Architecture)** en el frontend, conectado de forma asíncrona a la infraestructura en la nube de **Supabase (PostgreSQL y GoTrue Auth)** en el backend.
 
-La aplicación garantiza el control de acceso basado en roles (RBAC), cuadros de mando analíticos con gráficos vectoriales interactivos, exportación de informes en formatos estándar (PDF/CSV), y cumplimiento estricto de las directivas de usabilidad y accesibilidad (WCAG 2.1) con soporte para Modo Oscuro nativo.
+La aplicación garantiza el control de acceso basado en roles, cuadros de mando analíticos con gráficos vectoriales interactivos, exportación de informes en formatos estándar (PDF/CSV), y cumplimiento estricto de las directivas de usabilidad y accesibilidad (WCAG 2.1) con soporte para Modo Oscuro nativo.
 
 ## 🛠️ Arquitectura y Stack Tecnológico
 
@@ -35,13 +35,13 @@ La aplicación garantiza el control de acceso basado en roles (RBAC), cuadros de
 
 * **Supabase:** Base de datos relacional orientada al almacenamiento de empleados y roles.
 
-* **Supabase Auth (GoTrue):** Gestión de sesiones, encriptación automática de contraseñas mediante algoritmos de hashing seguro (**bcrypt**) y tokens JWT.
+* **Supabase Auth (GoTrue):** Gestión de sesiones, encriptación automática de contraseñas mediante hashing (**bcrypt**).
 
 * **RxJS / Promises (Async-Await):** Consumo concurrente de datos e integración con APIs externas.
 
 ### Despliegue y CI/CD
 
-* **Git & GitHub:** Control de versiones estructurado mediante ramas (`main`, `develop`, `feature`).
+* **Git & GitHub:** Control de versiones.
 
 * **Vercel:** Integración continua y despliegue automatizado para producción.
 
@@ -51,7 +51,7 @@ La aplicación garantiza el control de acceso basado en roles (RBAC), cuadros de
 
 En cumplimiento con los estándares modernos de Angular, la aplicación prescinde de los módulos clásicos (`NgModule`) y adopta **Standalone Components** junto con **Angular Signals** para el control de estado reactivo sin sobrecarga de ciclos de re-renderizado (`ChangeDetectionStrategy`).
 
-#### Ejemplo de uso en `DashboardPage`:
+#### Ejemplo de uso en `HomePage`:
 
 Definimos la señal para indicar el estado de la comunicación asíncrona:
 
@@ -96,7 +96,7 @@ En la plantilla HTML, evaluamos directamente el valor de la Signal sin necesidad
 
 La tematización de la aplicación respeta las especificaciones de accesibilidad de contraste de color **WCAG 2.1**. El usuario puede cambiar entre Modo Claro y Modo Oscuro mediante un botón interactivo situado en la barra de navegación superior.
 
-#### A. Lógica de Control en TypeScript (`dashboard.page.ts`)
+#### A. Lógica de Control en TypeScript (`home.page.ts`)
 
 El estado del tema se almacena en `localStorage` para garantizar la persistencia entre sesiones y se sincroniza dinámicamente con los colores del canvas de **Chart.js**:
 
@@ -327,32 +327,52 @@ Componente encargado del filtrado, paginación y renderizado tabular de la plant
 
 ```
 gestion-multiplataforma/
-└── src/
-    └── app/
-        ├── components/
-        │   ├── navegacion/
-        │   ├── tabla-datos/
-        │   ├── tabla-usuarios/
-        │   ├── tarjeta-info/
-        │   └── widget-estadistico/
-        │       ├── widget.estadistico.component.html
-        │       ├── widget.estadistico.component.scss
-        │       └── widget.estadistico.component.ts
-        ├── environments/
-        ├── guards/
-        │   └── auth.guard.ts
-        ├── models/
-        ├── pages/
-        │   ├── empleado-formulario/
-        │   ├── home/
-        │   │   ├── home.page.html
-        │   │   ├── home.page.scss
-        │   │   ├── home.page.spec.ts
-        │   │   └── home.page.ts
-        │   ├── informes/
-        │   ├── login/
-        │   └── usuarios/
-        └── services/
+├── src/
+│   ├── app/
+│   │   ├── components/
+│   │   │   ├── navegacion/
+│   │   │   ├── tabla-datos/
+│   │   │   ├── tabla-usuarios/
+│   │   │   ├── tarjeta-info/
+│   │   │   └── widget-estadistico/
+│   │   │       ├── widget.estadistico.component.html
+│   │   │       ├── widget.estadistico.component.scss
+│   │   │       └── widget.estadistico.component.ts
+│   │   ├── environments/
+│   │   ├── guards/
+│   │   │   └── auth.guard.ts
+│   │   ├── models/
+│   │   ├── pages/
+│   │   │   ├── empleado-formulario/
+│   │   │   ├── home/
+│   │   │   │   ├── home.page.html
+│   │   │   │   ├── home.page.scss
+│   │   │   │   ├── home.page.spec.ts
+│   │   │   │   └── home.page.ts
+│   │   │   ├── informes/
+│   │   │   ├── login/
+│   │   │   └── usuarios/
+│   │   ├── services/
+│   │   ├── app.component.html
+│   │   ├── app.component.scss
+│   │   ├── app.component.spec.ts
+│   │   ├── app.component.ts
+│   │   └── app.routes.ts
+│   ├── assets/
+│   ├── theme/
+│   ├── global.scss
+│   ├── index.html
+│   ├── main.ts
+│   └── test-setup.ts
+├── supabase/
+├── www/
+├── .browserslistrc
+├── .editorconfig
+├── .gitignore
+├── angular.json
+├── capacitor.config.ts
+├── eslint.config.js
+└── ionic.config.json
         
 
 ```
