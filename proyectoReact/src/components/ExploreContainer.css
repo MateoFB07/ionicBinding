@@ -1,0 +1,38 @@
+.home-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.home-content h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.home-photo {
+  display: block;
+  width: min(100%, 480px);
+  max-height: 280px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.home-table {
+  width: min(100%, 480px);
+  border-collapse: collapse;
+}
+
+.home-table th,
+.home-table td {
+  border: 1px solid var(--ion-color-medium);
+  padding: 12px;
+  text-align: center;
+}
+
+.home-table th {
+  background: var(--ion-color-light);
+  font-weight: 600;
+}
