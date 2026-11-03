@@ -1,5 +1,11 @@
 @use '../../theme' as *;
 
+.main-title {
+  color: #e53935;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 .media-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -15,4 +21,13 @@
 .button-wrapper {
   grid-column: 3;
   justify-self: end;
+}
+
+.action-btn {
+  --background: #1976d2;
+}
+
+.bordered-image {
+  display: block;
+  border: 3px solid #2e7d32;
 }
