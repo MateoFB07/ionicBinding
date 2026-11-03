@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Blank
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Blank</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- TABLA / LISTA DE CLIENTES -->
+<h3>Listado de Clientes</h3>
+<ion-list>
+@for (proveedor of proveedores; track proveedor.id) {
+<ion-item>
+  
+<ion-label>
+<h2>{{ proveedor.nombre }}</h2>
+<p>{{ proveedor.unidades }}</p>
+</ion-label>
+</ion-item>
+}
+</ion-list>
+
+</ion-content>
