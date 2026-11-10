@@ -30,9 +30,11 @@ export class ClientsService {
   }
 
   static async updateClient(id: number, client: Client): Promise<void> {
+    const { id: _ignoredId, ...clientData } = client;
+
     const { error } = await supabase
       .from('clients')
-      .update(client)
+      .update(clientData)
       .eq('id', id);
     if (error) {
       throw error;

@@ -3,7 +3,9 @@ import { IonReactRouter } from '@ionic/react-router';
 import { Navigate, Route } from 'react-router-dom';
 
 import ClientsPage from './pages/ClientsPage';
+import EditClientPage from './pages/EditClientPage';
 import Home from './pages/Home';
+import NewClientPage from './pages/NewClientPage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -46,6 +48,8 @@ const App: React.FC = () => (
       <IonRouterOutlet>
         <Route path="/home" element={<Home />} />
         <Route path="/clients" element={<ClientsPage />} />
+        <Route path="/clients/edit/:id" element={<EditClientPage />} />
+        <Route path="/new-client" element={<NewClientPage />} />
         <Route path="/" element={<Navigate to="/home" replace />} />
       </IonRouterOutlet>
     </IonReactRouter>
