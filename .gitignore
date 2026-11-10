@@ -68,3 +68,8 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+/appclients-react/.env
+
+/appclients-react/.env
+/appclients-react/.env.*
