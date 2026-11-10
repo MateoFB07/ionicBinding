@@ -50,7 +50,7 @@ const App: React.FC = () => (
         <Route path="/clients" element={<ClientsPage />} />
         <Route path="/clients/edit/:id" element={<EditClientPage />} />
         <Route path="/new-client" element={<NewClientPage />} />
-        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/" element={<Navigate to="/clients" replace />} />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
