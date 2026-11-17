@@ -1,0 +1,50 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="main-toolbar">
+    <ion-title>LogiTrack <span>Express</span></ion-title>
+
+    <ion-buttons slot="end">
+      <ion-select
+        class="filter-select"
+        [value]="selectedPriority()"
+        (ionChange)="onPriorityFilterChange($event)"
+        label="Prioridad"
+        label-placement="stacked"
+        aria-label="Filtrar paquetes por prioridad"
+        interface="popover">
+        <ion-select-option value="ALL">Todas</ion-select-option>
+        <ion-select-option value="CRITICAL">Critical</ion-select-option>
+        <ion-select-option value="STANDARD">Standard</ion-select-option>
+        <ion-select-option value="LOW">Low</ion-select-option>
+      </ion-select>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar class="main-toolbar">
+    <ion-searchbar
+      class="modern-searchbar"
+      placeholder="Buscar por código (ej: LTK-8921-ES)..."
+      [value]="searchTerm()"
+      (ionInput)="onSearchInput($event)"
+      aria-label="Buscar paquetes por código de seguimiento">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="warehouse-content">
+  <main class="container">
+    <ion-list class="package-list">
+      @for (pkg of filteredPackages(); track pkg.id) {
+        <app-package-card
+          [packageData]="pkg"
+          (statusChange)="onStatusChanged($event)">
+        </app-package-card>
+      } @empty {
+        <div class="empty-state">
+          <ion-icon name="cube-outline" class="empty-icon" aria-hidden="true"></ion-icon>
+          <h2>No se encontraron paquetes</h2>
+          <p>No hay coincidencias para los criterios aplicados.</p>
+        </div>
+      }
+    </ion-list>
+  </main>
+</ion-content>

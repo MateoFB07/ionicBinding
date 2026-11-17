@@ -1,0 +1,58 @@
+<ion-item-sliding>
+  <ion-item
+    lines="none"
+    class="package-item"
+    [class.status-inspected]="packageData.status === 'INSPECTED'"
+    [class.status-rejected]="packageData.status === 'REJECTED'"
+    [ngClass]="'border-' + packageData.priority.toLowerCase()">
+
+    <ion-label class="package-info">
+      <div class="package-top">
+        <span class="tracking-code">{{ packageData.trackingCode }}</span>
+        <ion-badge
+          class="priority-badge"
+          [ngClass]="'badge-' + packageData.priority.toLowerCase()">
+          {{ packageData.priority }}
+        </ion-badge>
+      </div>
+
+      <p class="package-details">
+        Hub Destino: <strong>{{ packageData.destinationHub }}</strong> ·
+        Peso: <strong>{{ packageData.weightKg }} kg</strong>
+      </p>
+
+      <div class="status-row">
+        @if (packageData.status === 'IN_TRANSIT') {
+          <span class="status-pill pill-transit">● EN TRÁNSITO</span>
+        } @else if (packageData.status === 'INSPECTED') {
+          <span class="status-pill pill-inspected">✓ INSPECCIONADO</span>
+        } @else if (packageData.status === 'REJECTED') {
+          <span class="status-pill pill-rejected">✕ RECHAZADO</span>
+        }
+      </div>
+    </ion-label>
+
+    <div class="action-buttons" slot="end">
+      <ion-button
+        class="action-btn btn-approve"
+        fill="solid"
+        (click)="markAsInspected()"
+        [attr.aria-label]="'Marcar paquete ' + packageData.trackingCode + ' como inspeccionado'">
+        <ion-icon slot="icon-only" name="checkmark-circle-outline" aria-hidden="true"></ion-icon>
+      </ion-button>
+
+      <ion-button
+        class="action-btn btn-reject"
+        fill="solid"
+        (click)="markAsRejected()"
+        [attr.aria-label]="'Rechazar paquete ' + packageData.trackingCode">
+        <ion-icon slot="icon-only" name="close-circle-outline" aria-hidden="true"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-item>
+
+  <ion-item-options side="end">
+    <ion-item-option color="success" (click)="markAsInspected()">Aprobar</ion-item-option>
+    <ion-item-option color="danger" (click)="markAsRejected()">Rechazar</ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

@@ -1,0 +1,126 @@
+.package-item {
+  --background: #1e293b;
+  --color: #f8fafc;
+  --padding-start: 16px;
+  --padding-end: 12px;
+  --inner-padding-end: 4px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+
+  &.border-critical {
+    border-left: 6px solid #ef4444;
+  }
+  &.border-standard {
+    border-left: 6px solid #3b82f6;
+  }
+  &.border-low {
+    border-left: 6px solid #10b981;
+  }
+
+  &.status-rejected {
+    --background: #271519;
+    border-color: #7f1d1d;
+  }
+}
+
+.package-info {
+  margin: 14px 0;
+}
+
+.package-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.tracking-code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.priority-badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffffff;
+
+  &.badge-critical {
+    --background: #dc2626;
+  }
+  &.badge-standard {
+    --background: #1d4ed8;
+  }
+  &.badge-low {
+    --background: #15803d;
+  }
+}
+
+.package-details {
+  font-size: 0.88rem;
+  color: #e2e8f0;
+  margin: 0;
+
+  strong {
+    color: #ffffff;
+  }
+}
+
+.status-row {
+  margin-top: 10px;
+}
+
+.status-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  display: inline-block;
+
+  &.pill-transit {
+    background: #78350f;
+    color: #fef3c7;
+  }
+  &.pill-inspected {
+    background: #065f46;
+    color: #d1fae5;
+  }
+  &.pill-rejected {
+    background: #991b1b;
+    color: #fee2e2;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.action-btn {
+  --border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+
+  ion-icon {
+    font-size: 1.4rem;
+    color: #ffffff;
+  }
+
+  &.btn-approve {
+    --background: #15803d;
+    --background-activated: #166534;
+  }
+
+  &.btn-reject {
+    --background: #b91c1c;
+    --background-activated: #991b1b;
+  }
+}
