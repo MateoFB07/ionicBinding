@@ -1,0 +1,60 @@
+/* Fondo oscuro futurista estilo Vice City / GTA VI */
+.gtavi-bg {
+  --background: radial-gradient(circle at top right, #2b1055 0%, #120826 45%, #070510 100%);
+  color: #ffffff;
+}
+
+/* Cabecera y título con degradado neón */
+.gtavi-title {
+  background: linear-gradient(90deg, #ff2a85 0%, #ff7b00 50%, #00f0ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Tarjeta estilo cristal oscuro con borde neón al pasar el ratón */
+.gtavi-card {
+  background: rgba(20, 14, 38, 0.85) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 42, 133, 0.35) !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.gtavi-card:hover {
+  transform: translateY(-6px);
+  border-color: #00f0ff !important;
+  box-shadow: 0 12px 30px rgba(255, 42, 133, 0.3), 0 0 15px rgba(0, 240, 255, 0.25) !important;
+}
+
+/* Contenedor de la imagen PNG con degradado sutil */
+.gtavi-figure {
+  background: linear-gradient(180deg, rgba(255, 42, 133, 0.15) 0%, rgba(12, 8, 24, 0.95) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Etiqueta de tecnología estilo neón */
+.gtavi-badge {
+  background: linear-gradient(45deg, #ff2a85, #ff7b00);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 10px rgba(255, 42, 133, 0.5);
+}
+
+/* Botón futurista para el cómic */
+.gtavi-btn {
+  border: 1px solid #00f0ff;
+  color: #00f0ff;
+  background: transparent;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.gtavi-btn:hover {
+  background: #00f0ff;
+  color: #070510;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+}
