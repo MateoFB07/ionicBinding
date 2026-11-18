@@ -58,3 +58,7 @@
   color: #070510;
   box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
 }
+.gtavi-toolbar {
+  --background: #070510;
+  --color: #00f0ff;
+}

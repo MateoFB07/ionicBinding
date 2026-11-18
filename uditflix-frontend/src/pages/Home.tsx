@@ -18,7 +18,7 @@ const Home: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar style={{ '--background': '#070510', '--color': '#00f0ff' }}>
+        <IonToolbar className="gtavi-toolbar">
           <IonTitle className="fw-bold">UDITFLIX // VI</IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -33,12 +33,13 @@ const Home: React.FC = () => {
             {products.map((item) => (
               <div key={item.id} className="col-12 col-md-6 col-lg-4">
                 <div className="card h-100 text-white gtavi-card">
-                  
                   {/* Imagen PNG en figure */}
                   <figure className="figure m-0 gtavi-figure p-3 text-center">
                     <img
                       src={item.imagen}
-                      alt={item.titulo}
+                      alt={`Portada del proyecto ${item.titulo}`}
+                      width="200"
+                      height="180"
                       className="figure-img img-fluid mb-0"
                       style={{ height: '180px', objectFit: 'contain' }}
                     />
@@ -46,11 +47,11 @@ const Home: React.FC = () => {
 
                   <div className="card-body d-flex flex-column p-4">
                     <div className="d-flex justify-content-between align-items-center mb-2">
-                      <h5 className="card-title fw-bold mb-0">{item.titulo}</h5>
+                      <h2 className="h5 card-title fw-bold mb-0">{item.titulo}</h2>
                       <span className="badge gtavi-badge">{item.tecnologia}</span>
                     </div>
 
-                    <p className="small text-light opacity-75 mb-3">
+                    <p className="small text-light mb-3">
                       Autor: {item.autor}
                     </p>
 
@@ -59,7 +60,9 @@ const Home: React.FC = () => {
                       <video
                         src={item.enlace_video || item.enlace_teaser}
                         controls
-                        preload="auto"
+                        preload="metadata"
+                        playsInline
+                        aria-label={`Reproductor de vídeo de ${item.titulo}`}
                         className="w-100 rounded mb-3 bg-black"
                         style={{ height: '170px' }}
                       />
@@ -78,11 +81,10 @@ const Home: React.FC = () => {
                     )}
 
                     {/* Fecha */}
-                    <small className="mt-auto pt-2 border-top border-secondary text-info">
+                    <small className="mt-auto pt-2 border-top border-secondary text-light">
                       Fecha: {new Date(item.created_at).toLocaleDateString('es-ES')}
                     </small>
                   </div>
-
                 </div>
               </div>
             ))}
