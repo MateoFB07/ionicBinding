@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectionStrategy, signal, computed, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, computed, inject, DOCUMENT } from '@angular/core';
 import {
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
@@ -14,7 +15,7 @@ import {
 } from '@ionic/angular';
 import type { SearchbarCustomEvent } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { cubeOutline } from 'ionicons/icons';
+import { cubeOutline, moonOutline, sunnyOutline } from 'ionicons/icons';
 
 import { PackageCardComponent } from '../components/package-card/package-card.component';
 import type { PackagePriority, PackageStatus, WarehousePackage } from '../models/package.model';
@@ -30,6 +31,7 @@ import { PackageService } from '../services/package.service';
     IonToolbar,
     IonTitle,
     IonButtons,
+    IonButton,
     IonSelect,
     IonSelectOption,
     IonSearchbar,
@@ -43,13 +45,29 @@ import { PackageService } from '../services/package.service';
 })
 export class HomePage {
   private readonly packageService = inject(PackageService);
+  private readonly doc = inject(DOCUMENT);
 
   // Signals de estado local para los filtros de la UI
   public readonly searchTerm = signal<string>('');
   public readonly selectedPriority = signal<PackagePriority | 'ALL'>('ALL');
 
+  // Preferencia de tema: se guarda para no perderla al recargar.
+  public readonly isDarkMode = signal<boolean>(localStorage.getItem('trackingspace-dark') !== 'false');
+
   constructor() {
-    addIcons({ cubeOutline });
+    addIcons({ cubeOutline, moonOutline, sunnyOutline });
+    this.applyTheme();
+  }
+
+  public toggleDarkMode(): void {
+    this.isDarkMode.update((dark) => !dark);
+    this.applyTheme();
+  }
+
+  private applyTheme(): void {
+    const dark = this.isDarkMode();
+    this.doc.documentElement.classList.toggle('dark', dark);
+    localStorage.setItem('trackingspace-dark', String(dark));
   }
 
   // Estado reactivo computado: cero suscripciones manuales, cero fugas de memoria

@@ -33,5 +33,118 @@
  */
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+@import "@ionic/angular/css/palettes/dark.class.css";
+/* @import '@ionic/angular/css/palettes/dark.system.css'; */
+
+/* Tokens de tema. La clase .dark se aplica sobre <html> desde HomePage. */
+:root {
+  --app-bg: #faf6ef;
+  --surface: #ffffff;
+  --surface-rejected: #ffe4e9;
+  --toolbar-bg: linear-gradient(100deg, #ffffff 0%, #fff4dc 100%);
+  --text-main: #241d33;
+  --text-muted: #5c5470;
+  --border-color: #ded6ea;
+  --accent: #8a5200;
+  --priority-critical: #be123c;
+  --priority-standard: #6d28d9;
+  --priority-low: #0f766e;
+  --status-transit: #92400e;
+  --status-inspected: #0f766e;
+  --status-rejected: #be123c;
+}
+
+html.dark {
+  --app-bg: #12101c;
+  --surface: #1e1b2e;
+  --surface-rejected: #3a1b28;
+  --toolbar-bg: linear-gradient(100deg, #241d3f 0%, #3b2a5a 100%);
+  --text-main: #f7f3ff;
+  --text-muted: #c4b8dd;
+  --border-color: #3b3454;
+  --accent: #ffc857;
+  --priority-critical: #be123c;
+  --priority-standard: #6d28d9;
+  --priority-low: #0f766e;
+  --status-transit: #ffc857;
+  --status-inspected: #4cc9b0;
+  --status-rejected: #ff8fa3;
+}
+
+/* Desplegable de prioridad: mismo tema que la app y aspecto de panel, no lista nativa. */
+ion-popover {
+  --background: var(--surface);
+  --color: var(--text-main);
+  --width: 240px;
+  --min-width: 240px;
+  --max-height: 360px;
+  --box-shadow: 0 18px 45px rgba(18, 16, 28, 0.35);
+}
+
+ion-popover::part(content) {
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+ion-popover ion-select-popover {
+  --background: var(--surface);
+  background: var(--surface);
+  color: var(--text-main);
+}
+
+ion-popover ion-list {
+  --background: transparent;
+  background: transparent !important;
+  padding: 6px 0;
+}
+
+ion-popover ion-list-header {
+  --background: transparent;
+  --color: var(--accent);
+  min-height: 38px;
+  padding-left: 16px;
+  padding-right: 16px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+ion-popover ion-list-header::part(native) {
+  padding-left: 0;
+}
+
+ion-popover ion-item.select-interface-option {
+  --background: transparent !important;
+  --background-hover: color-mix(in srgb, var(--accent) 12%, transparent) !important;
+  --background-activated: color-mix(in srgb, var(--accent) 18%, transparent) !important;
+  --background-focused: color-mix(in srgb, var(--accent) 10%, transparent) !important;
+  --color: var(--text-main) !important;
+  --border-color: transparent !important;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --min-height: 46px;
+  color: var(--text-main) !important;
+  font-size: 14px;
+}
+
+ion-popover ion-item.item-radio-checked {
+  --background: color-mix(in srgb, var(--accent) 16%, transparent) !important;
+  font-weight: 700;
+}
+
+ion-popover ion-radio {
+  --color: var(--text-muted) !important;
+  --color-checked: var(--accent) !important;
+  --border-width: 2px;
+  --border-color: var(--text-muted) !important;
+  --border-color-checked: var(--accent) !important;
+  margin-right: 12px;
+}
+
+ion-popover ion-label,
+ion-popover .select-option-label {
+  color: var(--text-main);
+}

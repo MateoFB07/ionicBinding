@@ -1,0 +1,22 @@
+/* Directivas obligatorias de Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Pequeños ajustes globales */
+html {
+  scroll-behavior: smooth; /* microinteracción: desplazamiento suave al hacer clic en el menú */
+}
+
+::selection {
+  background: #ffe600;
+  color: #000;
+}
+
+/* Componente reutilizable: botón brutalista.
+   @apply nos permite usar clases de Tailwind dentro de CSS. */
+@layer components {
+  .brutal-btn {
+    @apply inline-block border-4 border-black px-5 py-3 font-bold uppercase shadow-brutal transition-all duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutal-lg active:translate-x-1 active:translate-y-1 active:shadow-none;
+  }
+}

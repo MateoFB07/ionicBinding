@@ -1,8 +1,43 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar class="main-toolbar">
-    <ion-title>LogiTrack <span>Express</span></ion-title>
+  <ion-toolbar class="trackingspace-toolbar">
+    <div class="brand-mark" aria-hidden="true">✦</div>
+    <ion-title>
+      <span class="brand-name">TrackingSpace</span>
+    </ion-title>
 
     <ion-buttons slot="end">
+      <ion-button
+        class="theme-toggle"
+        fill="clear"
+        (click)="toggleDarkMode()"
+        [attr.aria-label]="isDarkMode() ? 'Activar modo claro' : 'Activar modo oscuro'">
+        <ion-icon
+          slot="icon-only"
+          [name]="isDarkMode() ? 'sunny-outline' : 'moon-outline'"
+          aria-hidden="true">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="warehouse-content">
+  <section class="hero">
+    <p class="eyebrow">Recepción · Almacén central</p>
+    <h1>Control de envíos en curso</h1>
+    <p>Consulta cada tracking, filtra por prioridad y registra la inspección o el rechazo de los paquetes.</p>
+  </section>
+
+  <main class="panel">
+    <div class="filters">
+      <ion-searchbar
+        class="modern-searchbar"
+        placeholder="Buscar por código (ej: LTK-8921-ES)..."
+        [value]="searchTerm()"
+        (ionInput)="onSearchInput($event)"
+        aria-label="Buscar paquetes por código de seguimiento">
+      </ion-searchbar>
+
       <ion-select
         class="filter-select"
         [value]="selectedPriority()"
@@ -10,29 +45,21 @@
         label="Prioridad"
         label-placement="stacked"
         aria-label="Filtrar paquetes por prioridad"
-        interface="popover">
+        interface="popover"
+        [interfaceOptions]="{ header: 'Filtrar prioridad' }">
         <ion-select-option value="ALL">Todas</ion-select-option>
         <ion-select-option value="CRITICAL">Critical</ion-select-option>
         <ion-select-option value="STANDARD">Standard</ion-select-option>
         <ion-select-option value="LOW">Low</ion-select-option>
       </ion-select>
-    </ion-buttons>
-  </ion-toolbar>
+    </div>
 
-  <ion-toolbar class="main-toolbar">
-    <ion-searchbar
-      class="modern-searchbar"
-      placeholder="Buscar por código (ej: LTK-8921-ES)..."
-      [value]="searchTerm()"
-      (ionInput)="onSearchInput($event)"
-      aria-label="Buscar paquetes por código de seguimiento">
-    </ion-searchbar>
-  </ion-toolbar>
-</ion-header>
+    <div class="list-heading">
+      <h2>Trackings registrados</h2>
+      <span>{{ filteredPackages().length }} paquetes</span>
+    </div>
 
-<ion-content class="warehouse-content">
-  <main class="container">
-    <ion-list class="package-list">
+    <ion-list class="tracking-list">
       @for (pkg of filteredPackages(); track pkg.id) {
         <app-package-card
           [packageData]="pkg"

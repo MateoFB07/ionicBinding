@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import {
-  IonBadge,
   IonButton,
   IonIcon,
   IonItem,
@@ -25,7 +24,6 @@ import { PackageStatus, WarehousePackage } from '../../models/package.model';
     IonItemSliding,
     IonItem,
     IonLabel,
-    IonBadge,
     IonButton,
     IonIcon,
     IonItemOptions,

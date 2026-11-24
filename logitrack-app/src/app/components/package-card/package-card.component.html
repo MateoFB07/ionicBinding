@@ -2,48 +2,66 @@
   <ion-item
     lines="none"
     class="package-item"
-    [class.status-inspected]="packageData.status === 'INSPECTED'"
-    [class.status-rejected]="packageData.status === 'REJECTED'"
-    [ngClass]="'border-' + packageData.priority.toLowerCase()">
+    [ngClass]="[
+      'priority-' + packageData.priority.toLowerCase(),
+      'status-' + packageData.status.toLowerCase().replace('_', '-')
+    ]">
 
     <ion-label class="package-info">
-      <div class="package-top">
+      <div class="card-head">
         <span class="tracking-code">{{ packageData.trackingCode }}</span>
-        <ion-badge
-          class="priority-badge"
-          [ngClass]="'badge-' + packageData.priority.toLowerCase()">
-          {{ packageData.priority }}
-        </ion-badge>
+        @if (packageData.status === 'IN_TRANSIT') {
+          <span class="status-pill">EN TRÁNSITO</span>
+        } @else if (packageData.status === 'INSPECTED') {
+          <span class="status-pill">INSPECCIONADO</span>
+        } @else if (packageData.status === 'REJECTED') {
+          <span class="status-pill">RECHAZADO</span>
+        }
       </div>
 
-      <p class="package-details">
-        Hub Destino: <strong>{{ packageData.destinationHub }}</strong> ·
-        Peso: <strong>{{ packageData.weightKg }} kg</strong>
-      </p>
+      <div class="card-body">
+        <div class="route">
+          <span aria-hidden="true">◈</span>
+          <span>Destino: <strong>{{ packageData.destinationHub }}</strong></span>
+          <span class="route-arrow" aria-hidden="true">→</span>
+        </div>
 
-      <div class="status-row">
-        @if (packageData.status === 'IN_TRANSIT') {
-          <span class="status-pill pill-transit">● EN TRÁNSITO</span>
-        } @else if (packageData.status === 'INSPECTED') {
-          <span class="status-pill pill-inspected">✓ INSPECCIONADO</span>
-        } @else if (packageData.status === 'REJECTED') {
-          <span class="status-pill pill-rejected">✕ RECHAZADO</span>
-        }
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span>Peso</span>
+            <strong>{{ packageData.weightKg }} kg</strong>
+          </div>
+          <div class="meta-item">
+            <span>Registro</span>
+            <strong>{{ packageData.timestamp | date:'dd/MM HH:mm' }}</strong>
+          </div>
+        </div>
+
+        <div class="progress-track" aria-hidden="true">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="card-foot">
+        <span class="priority-label">
+          <span class="priority-dot" aria-hidden="true"></span>
+          Prioridad {{ packageData.priority }}
+        </span>
       </div>
     </ion-label>
 
     <div class="action-buttons" slot="end">
       <ion-button
-        class="action-btn btn-approve"
-        fill="solid"
+        class="action-button btn-approve"
+        fill="clear"
         (click)="markAsInspected()"
         [attr.aria-label]="'Marcar paquete ' + packageData.trackingCode + ' como inspeccionado'">
         <ion-icon slot="icon-only" name="checkmark-circle-outline" aria-hidden="true"></ion-icon>
       </ion-button>
 
       <ion-button
-        class="action-btn btn-reject"
-        fill="solid"
+        class="action-button btn-reject"
+        fill="clear"
         (click)="markAsRejected()"
         [attr.aria-label]="'Rechazar paquete ' + packageData.trackingCode">
         <ion-icon slot="icon-only" name="close-circle-outline" aria-hidden="true"></ion-icon>

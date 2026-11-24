@@ -34,6 +34,33 @@ export class PackageService {
       status: 'INSPECTED',
       timestamp: new Date('2026-11-11T09:00:00'),
     },
+    {
+      id: 'd2e40404-1a5f-7e44-cf44-4d5e6f7a8b9c',
+      trackingCode: 'LTK-7745-ES',
+      destinationHub: 'HUB-SEV-SANPABLO',
+      weightKg: 8.6,
+      priority: 'CRITICAL',
+      status: 'REJECTED',
+      timestamp: new Date('2026-11-11T09:15:00'),
+    },
+    {
+      id: 'e3f50505-2b6f-8f55-df55-5e6f7a8b9c0d',
+      trackingCode: 'LTK-2260-ES',
+      destinationHub: 'HUB-BIL-BILBAO',
+      weightKg: 17.2,
+      priority: 'STANDARD',
+      status: 'IN_TRANSIT',
+      timestamp: new Date('2026-11-11T09:30:00'),
+    },
+    {
+      id: 'f4a60606-3c7f-9f66-ef66-6f7a8b9c0d1e',
+      trackingCode: 'LTK-5583-ES',
+      destinationHub: 'HUB-MAD-GETAFE',
+      weightKg: 1.9,
+      priority: 'LOW',
+      status: 'INSPECTED',
+      timestamp: new Date('2026-11-11T09:45:00'),
+    },
   ]);
 
   // Señal de solo lectura expuesta a los componentes

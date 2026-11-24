@@ -1,126 +1,221 @@
-.package-item {
-  --background: #1e293b;
-  --color: #f8fafc;
-  --padding-start: 16px;
-  --padding-end: 12px;
-  --inner-padding-end: 4px;
+:host {
+  display: block;
+  --priority-color: var(--accent);
+  --status-color: var(--text-muted);
+}
+
+ion-item-sliding {
+  display: block;
   margin-bottom: 12px;
-  border-radius: 12px;
-  border: 1px solid #334155;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 18px;
+}
 
-  &.border-critical {
-    border-left: 6px solid #ef4444;
-  }
-  &.border-standard {
-    border-left: 6px solid #3b82f6;
-  }
-  &.border-low {
-    border-left: 6px solid #10b981;
-  }
+.package-item {
+  --background: var(--surface);
+  --background-hover: var(--surface);
+  --background-activated: var(--surface);
+  --color: var(--text-main);
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-end: 0;
+  min-height: 0;
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--priority-color);
+  border-radius: 18px;
+  box-shadow: 0 10px 24px rgba(36, 29, 51, 0.06);
+  overflow: hidden;
+}
 
-  &.status-rejected {
-    --background: #271519;
-    border-color: #7f1d1d;
-  }
+.package-item::part(native) {
+  align-items: stretch;
+}
+
+.priority-critical {
+  --priority-color: var(--priority-critical);
+}
+
+.priority-standard {
+  --priority-color: var(--priority-standard);
+}
+
+.priority-low {
+  --priority-color: var(--priority-low);
+}
+
+.status-in-transit {
+  --status-color: var(--status-transit);
+}
+
+.status-inspected {
+  --status-color: var(--status-inspected);
+}
+
+.status-rejected {
+  --status-color: var(--status-rejected);
 }
 
 .package-info {
-  margin: 14px 0;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 14px 16px 10px;
 }
 
-.package-top {
+.card-head {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
-  margin-bottom: 6px;
+  margin-bottom: 12px;
 }
 
 .tracking-code {
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.5px;
-}
-
-.priority-badge {
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #ffffff;
-
-  &.badge-critical {
-    --background: #dc2626;
-  }
-  &.badge-standard {
-    --background: #1d4ed8;
-  }
-  &.badge-low {
-    --background: #15803d;
-  }
-}
-
-.package-details {
-  font-size: 0.88rem;
-  color: #e2e8f0;
-  margin: 0;
-
-  strong {
-    color: #ffffff;
-  }
-}
-
-.status-row {
-  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--text-main);
 }
 
 .status-pill {
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 5px 10px;
   border-radius: 999px;
-  display: inline-block;
+  background: color-mix(in srgb, var(--status-color) 18%, transparent);
+  color: var(--status-color);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
 
-  &.pill-transit {
-    background: #78350f;
-    color: #fef3c7;
-  }
-  &.pill-inspected {
-    background: #065f46;
-    color: #d1fae5;
-  }
-  &.pill-rejected {
-    background: #991b1b;
-    color: #fee2e2;
-  }
+.status-pill::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.route {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.route strong {
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.route-arrow {
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 17px;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.meta-item span {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.meta-item strong {
+  display: block;
+  overflow: hidden;
+  color: var(--text-main);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress-track {
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--border-color) 70%, transparent);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ffc857, var(--priority-color));
+}
+
+.status-in-transit .progress-fill {
+  width: 45%;
+}
+
+.status-inspected .progress-fill {
+  width: 100%;
+}
+
+.status-rejected .progress-fill {
+  width: 70%;
+  background: var(--status-rejected);
+}
+
+.card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 10px -16px -10px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border-color);
+  background: color-mix(in srgb, var(--app-bg) 72%, transparent);
+}
+
+.priority-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.priority-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--priority-color);
 }
 
 .action-buttons {
   display: flex;
-  gap: 8px;
-  margin-left: 10px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-right: 8px;
 }
 
-.action-btn {
+.action-button {
+  --background: transparent;
+  --background-hover: color-mix(in srgb, var(--accent) 12%, transparent);
+  --color: var(--accent);
   --border-radius: 10px;
-  width: 44px;
-  height: 44px;
+  width: 34px;
+  height: 32px;
   margin: 0;
+}
 
-  ion-icon {
-    font-size: 1.4rem;
-    color: #ffffff;
-  }
-
-  &.btn-approve {
-    --background: #15803d;
-    --background-activated: #166534;
-  }
-
-  &.btn-reject {
-    --background: #b91c1c;
-    --background-activated: #991b1b;
-  }
+.btn-reject {
+  --color: var(--status-rejected);
 }
